@@ -25,10 +25,10 @@ public class ResourceController {
     }
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @PostMapping(value = "/getUser")
-    public ResponseEntity<?> getUser(@RequestBody ResourceRequest resourceRequest){
+    @GetMapping(value = "/getUser")
+    public ResponseEntity<?> getUser(@RequestParam String username){
 
         System.out.println("-----------in getUser");
-        return ResponseEntity.ok(userDetailsService.getUser(resourceRequest));
+        return ResponseEntity.ok(userDetailsService.getUser(username));
     }
 }

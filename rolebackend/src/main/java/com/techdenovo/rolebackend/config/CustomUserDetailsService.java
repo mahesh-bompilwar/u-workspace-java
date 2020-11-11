@@ -1,6 +1,5 @@
 package com.techdenovo.rolebackend.config;
 
-
 import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.techdenovo.rolebackend.model.DAOUser;
 import com.techdenovo.rolebackend.model.ResourceRequest;
@@ -52,8 +51,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         return userRepository.save(newUser);
     }
 
-    public DAOUser getUser(ResourceRequest resourceRequest){
-        String username = jwtUtil.getUsernameFromToken(resourceRequest.getToken());
+    public DAOUser getUser(String username){
+
         DAOUser daoUser = userRepository.findByUsername(username);
 
         return daoUser;
