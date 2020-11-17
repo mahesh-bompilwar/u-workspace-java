@@ -41,20 +41,49 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
        throw new UsernameNotFoundException("User not found for "+username);
     }
-    public DAOUser save(UserDto userDto){
-        DAOUser newUser =  new DAOUser();
-        //newUser.setUsername(userDto.getUsername());
-        //newUser.setPassword(bcryptEncoder.encode(userDto.getPassword()));
-        //newUser.setRole(userDto.getRole());
-        userDto.setPassword(bcryptEncoder.encode(userDto.getPassword()));
-        BeanUtils.copyProperties(userDto, newUser);
-        return userRepository.save(newUser);
+    public boolean save(UserDto userDto){
+
+        boolean flag = isUserNameExist(userDto);
+        if (!flag) {
+            DAOUser newUser =  new DAOUser();
+            //newUser.setUsername(userDto.getUsername());
+            //newUser.setPassword(bcryptEncoder.encode(userDto.getPassword()));
+            //newUser.setRole(userDto.getRole());
+            userDto.setPassword(bcryptEncoder.encode(userDto.getPassword()));
+            BeanUtils.copyProperties(userDto, newUser);
+            userRepository.save(newUser);
+            return true;
+        }else {
+            return false;
+        }
+    }
+    public boolean isUserNameExist(UserDto userDto) {
+        DAOUser existingStudent = userRepository.findByUsername(userDto.getUsername());
+        if (existingStudent != null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public DAOUser getUser(String username){
-
         DAOUser daoUser = userRepository.findByUsername(username);
-
         return daoUser;
+    }
+
+    public DAOUser updateStudent(DAOUser daoUser) {
+        if (isUserExist(daoUser)) {
+            return userRepository.save(daoUser);
+        } else {
+            return null;
+        }
+    }
+
+    public boolean isUserExist(DAOUser daoUser) {
+        return userRepository.existsById(daoUser.getId());
+    }
+
+    public List<DAOUser> getUsers(){
+        return userRepository.findAll();
     }
 }

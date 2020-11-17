@@ -37,6 +37,10 @@ public class JwtUtil {
             claims.put("isUser",true);
             System.out.println("===================ROLE USER====================");
         }
+        if(roles.contains(new SimpleGrantedAuthority("TUTOR"))){
+            claims.put("isTutor",true);
+            System.out.println("===================ROLE TUTOR====================");
+        }
 
         return doGenerateToken(claims,userDetails.getUsername());
     }
@@ -69,11 +73,16 @@ public class JwtUtil {
 
         Boolean isAdmin = claims.get("isAdmin", Boolean.class);
         Boolean isUser = claims.get("isUser",Boolean.class);
+        Boolean isTutor = claims.get("isTutor",Boolean.class);
+
         if(isAdmin != null && isAdmin){
             roles= Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
         if(isUser != null && isUser){
             roles= Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+        }
+        if(isTutor != null && isTutor){
+            roles= Arrays.asList(new SimpleGrantedAuthority("ROLE_TUTOR"));
         }
         return roles;
     }
